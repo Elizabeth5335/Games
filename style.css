@@ -10,7 +10,7 @@
 }
 
 body{
-    min-height: 150vh;
+    /* min-height: 150vh; */
     background: linear-gradient(#2b1055, #7597de);
     overflow-x: hidden;
 }
