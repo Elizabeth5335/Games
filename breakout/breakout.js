@@ -17,8 +17,8 @@ let player = {
 //ball
 let ballWidth = 10;
 let ballHeight = 10;
-let ballVelocityX = 3; //15 for testing, 3 normal
-let ballVelocityY = 2; //10 for testing, 2 normal
+let ballVelocityX = 6; //15 for testing, 3 normal
+let ballVelocityY = 4; //10 for testing, 2 normal
 
 let ball = {
     x : boardWidth/2,
@@ -55,6 +55,12 @@ window.onload = function() {
     document.addEventListener("mousemove", movePlayer);
 
     createBlocks();
+
+    counterBoard = document.getElementById("counterBoard");
+    counterBoard.height = 300;
+    counterBoard.width = 300;
+    counterContext = counterBoard.getContext("2d");
+
 }
 
 function update() {
@@ -93,10 +99,10 @@ function update() {
     if (ball.y <= 0) { 
         ball.velocityY *= -1;
     }
-    else if (ball.x <= 0 || (ball.x + ball.width >= boardWidth)) {
+    if (ball.x <= 0 || (ball.x + ball.width >= boardWidth)) {
         ball.velocityX *= -1;
     }
-    else if (ball.y >= player.y+ball.height) {
+    if (ball.y >= player.y+ball.height) {
         context.font = "20px sans-serif";
         context.fillText("Game Over: Press 'Space' to Restart", 80, 400);
         gameOver = true;
@@ -124,12 +130,47 @@ function update() {
         }
     }
 
-    if (blockCount == 0) {
-        score += 1000; //bonus points
+    let isNextLevelTimeoutSet = false;
+    
+    if (blockCount == 0 && !isNextLevelTimeoutSet) {
+        score += 1000; // bonus points
+        isNextLevelTimeoutSet = true; // Set the flag to prevent multiple timeouts
+    
+        ball = {
+            x: boardWidth / 2,
+            y: boardHeight / 2,
+            width: ballWidth,
+            height: ballHeight,
+            velocityX: ballVelocityX,
+            velocityY: ballVelocityY
+        };
         blockRows = Math.min(blockRows + 1, blockMaxRows);
         createBlocks();
+    
+        ball.velocityX = 0;
+        ball.velocityY = 0;
+    
+        let counter = 3;
+        let counterInterval = setInterval(() => {
+           
+            if (counter > 0) {
+                counterContext.clearRect(0, 0, counterBoard.width, counterBoard.height);
+                counterContext.font = "100px sans-serif";
+                counterContext.fillStyle = "white";
+                // counterContext.textAlign = "center";
+                counterContext.fillText(counter, 100, 200);
+                counter--;
+            } else {
+                clearInterval(counterInterval); // Stop the counter
+                ball.velocityX = ballVelocityX;
+                ball.velocityY = ballVelocityY;
+                counterContext.clearRect(0, 0, counterBoard.width, counterBoard.height);
+            }
+        }, 1000);
     }
     
+
+      
     context.font = "20px sans-serif";
     context.fillText('Score: '+score, 30, 35);
 }
