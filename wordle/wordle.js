@@ -131,7 +131,6 @@ function update() {
     }
 
     guess = guess.toLowerCase();
-    console.log(guess);
 
     if (!guessList.includes(guess)) {
         const popup = document.getElementById("popup");
@@ -148,7 +147,7 @@ function update() {
     //start processing guess
     let correct = 0;
 
-    let letterCount = {}; //keep track of letter frequency, ex) KENNY -> {K:1, E:1, N:2, Y: 1}
+    let letterCount = {};
     for (let i = 0; i < word.length; i++) {
         let letter = word[i];
 
@@ -160,7 +159,6 @@ function update() {
         }
     }
 
-    console.log(letterCount);
 
     for (let c = 0; c < width; c++) {
         let currTile = document.getElementById(row.toString() + '-' + c.toString());
@@ -179,7 +177,6 @@ function update() {
 
         if (correct == width) {
             gameOver = true;
-            console.log('you win');
             document.getElementById("answer").querySelector('p').innerText = 'You win!\nAnswer: ' + word;
             document.getElementById("answer").classList.add('show');
             if (!gameOver && row == height) {
@@ -188,7 +185,6 @@ function update() {
         }
     }
 
-    console.log(letterCount);
     for (let c = 0; c < width; c++) {
         let currTile = document.getElementById(row.toString() + '-' + c.toString());
         let letter = currTile.innerText;

@@ -27,6 +27,18 @@ header
     z-index: 10000;
 }
 
+@media (max-width: 768px) {
+    #menu {
+        display: none;
+    }
+}
+
+@media (min-width: 768px) {
+    #back-button {
+        display: none;
+    }
+}
+
 header ul{
     display: flex;
     justify-content: center;
@@ -39,11 +51,15 @@ header ul li{
 }
 
 
-header ul li a{
+header ul li a, #back-button{
     text-decoration: none; 
     padding: 6px 15px;
     color: #fff;
     border-radius: 20px;
+}
+
+#back-button{
+    font-size: 3vh;
 }
 
 header ul li a:hover{

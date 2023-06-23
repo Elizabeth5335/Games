@@ -1,0 +1,65 @@
+.main{
+    margin-top: 80px;
+}  
+
+  .answer, #rules {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    min-height: 200px;
+    width: 350px;
+    font: 36px monospace;
+    transform: translate(-50%, -50%);
+    padding: 70px;
+    background-color: #2b1055;
+    border: 1px solid #ccc;
+    color: white;
+    border-radius: 4px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+    z-index: 9999;
+    display: none;
+  }
+  
+  #rules{
+    font: inherit;
+  }
+  .answer.show, #rules.show {
+    display: block;
+  }
+
+  h3{
+    font-family: 'Orbitron';
+  }
+
+  .answer h3{
+    font-family: 'Orbitron';
+    font-size: 2rem;
+  }
+
+  #restartBtn, #startBtn{
+    margin: auto;
+    font-weight: bold;
+    font: 24px 'Orbitron';
+  }
+
+hr {
+    width: 500px;
+}
+html, body {
+    height: 100%;
+    margin: 0;
+  }
+
+  body {
+    /* background: black; */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  canvas {
+    border: 1px solid white;
+    background: black;
+    height: 80vh;
+    width: 40vh;
+  }
