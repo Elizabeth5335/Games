@@ -53,6 +53,9 @@ window.onload = function() {
     requestAnimationFrame(update);
     document.addEventListener("keydown", movePlayer);
     document.addEventListener("mousemove", movePlayer);
+    document.addEventListener("touchstart", movePlayer);
+    document.addEventListener("touchmove", movePlayer);
+
 
     createBlocks();
 
@@ -61,6 +64,11 @@ window.onload = function() {
     counterBoard.width = 300;
     counterContext = counterBoard.getContext("2d");
 
+}
+
+
+function isMobileDevice() {
+    return (typeof window.orientation !== "undefined") || (navigator.userAgent.indexOf('IEMobile') !== -1);
 }
 
 function update() {
@@ -104,8 +112,13 @@ function update() {
     }
     if (ball.y >= player.y+ball.height) {
         context.font = "20px sans-serif";
-        context.fillText("Game Over: Press 'Space' to Restart", 80, 400);
         gameOver = true;
+        if (isMobileDevice()) {
+            context.fillText("Game Over: Tap the screen to restart", 30, 300);
+        }
+        else {
+            context.fillText("Game Over: Press 'Space' to Restart", 80, 400);
+        }
     }
 
     //blocks
@@ -178,16 +191,28 @@ function update() {
 
 function movePlayer(e) {
     if (gameOver) {
-        if (e.code == "Space") {
+        if (e.type === 'touchstart' || (e.code === "Space")) {
             resetGame();
         }
         return;
     }
 
-    let mouseX = e.clientX;
 
-    //update player position
-    player.x = mouseX;
+
+    let touchX;
+
+    if (e.type === 'touchmove') {
+        touchX = e.touches[0].clientX;
+    } else {
+        touchX = e.clientX;
+    }
+
+    player.x = touchX;
+
+    // let mouseX = e.clientX;
+
+    // //update player position
+    // player.x = mouseX;
     
     // Ensure the player stays within the bounds of the board
     if (player.x < 0) {
