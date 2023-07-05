@@ -105,12 +105,14 @@ function placeTetromino() {
 
 // show the game over screen
 function showGameOver() {
-
     document.getElementById('answer').classList.add('show');
-    document.getElementById("restartBtn").addEventListener("click", () => {
-        document.getElementById("answer").classList.remove('show');
-        location.reload();
-    });
+}
+
+document.getElementById("restartBtn").addEventListener("click", restart);
+
+function restart(){
+  document.getElementById("answer").classList.remove('show');
+  location.reload();
 }
 
 const canvas = document.getElementById('game');
@@ -185,8 +187,36 @@ let tetromino = getNextTetromino();
 let rAF = null;  // keep track of the animation frame so we can cancel it
 let gameOver = false;
 
+
+let paused = false;
+
+document.addEventListener('keydown', function(e) {
+  if (e.key === ' ') {
+    e.preventDefault();
+  }
+});
+
+function togglePause() {
+  paused = !paused;
+  if (paused) {
+    cancelAnimationFrame(rAF);
+    document.getElementById("pause").innerText = "Resume";
+  } else {
+    rAF = requestAnimationFrame(loop);
+    document.getElementById("pause").innerText = "Pause";
+  }
+}
+
+function showRules(){
+  paused = false;
+  togglePause();
+  document.getElementById("rules").classList.add('show');
+}
+
 // game loop
 function loop() {
+  if (paused) return;
+
   rAF = requestAnimationFrame(loop);
   context.clearRect(0,0,canvas.width,canvas.height);
 
@@ -232,7 +262,11 @@ function loop() {
   }
 }
 
-document.addEventListener('keydown', function(e) {
+document.addEventListener('keydown', move);
+document.addEventListener('move', move);
+document.addEventListener('touch', move);
+
+function move(e){
   if (gameOver) return;
 
   if (e.key === 'ArrowLeft' || e.key === 'ArrowRight') {
@@ -265,10 +299,89 @@ document.addEventListener('keydown', function(e) {
 
     tetromino.row = row;
   }
-});
+}
 
 
-document.getElementById('startBtn').addEventListener("click", () => {
-    document.getElementById("rules").classList.remove('show');
-    rAF = requestAnimationFrame(loop);
+// Add touch event listeners to the buttons
+const leftButton = document.getElementById('left');
+const rightButton = document.getElementById('right');
+const rotateButton = document.getElementById('rotate');
+const downButton = document.getElementById('down');
+
+leftButton.addEventListener('touchstart', () => {
+  moveLeft();
+  startRepeatedOperation(moveLeft);
 });
+
+leftButton.addEventListener('touchend', stopRepeatedOperation);
+
+rightButton.addEventListener('touchstart', () => {
+  moveRight();
+  startRepeatedOperation(moveRight);
+});
+
+rightButton.addEventListener('touchend', stopRepeatedOperation);
+
+rotateButton.addEventListener('touchstart', rotateTetromino);
+
+
+downButton.addEventListener('touchstart', () => {
+  down();
+  startRepeatedOperation(down);
+});
+
+function stopRepeatedOperation() {
+  clearInterval(repeatTimer);
+}
+
+downButton.addEventListener('touchend', stopRepeatedOperation);
+function moveLeft() {
+  const col = tetromino.col - 1;
+  if (isValidMove(tetromino.matrix, tetromino.row, col)) {
+    tetromino.col = col;
+  }
+}
+
+let repeatTimer;
+
+function startRepeatedOperation(operation) {
+  repeatTimer = setInterval(operation, 200); // Repeat the operation every 200ms
+}
+
+function moveRight() {
+  const col = tetromino.col + 1;
+  if (isValidMove(tetromino.matrix, tetromino.row, col)) {
+    tetromino.col = col;
+  }
+}
+
+function rotateTetromino() {
+  const matrix = rotate(tetromino.matrix);
+  if (isValidMove(matrix, tetromino.row, tetromino.col)) {
+    tetromino.matrix = matrix;
+  }
+}
+
+function down() {
+  const row = tetromino.row + 1;
+
+    if (!isValidMove(tetromino.matrix, row, tetromino.col)) {
+      tetromino.row = row - 1;
+
+      placeTetromino();
+      return;
+    }
+
+    tetromino.row = row;
+}
+
+document.getElementById('startBtn').addEventListener("click", start);
+
+function start(){
+  document.getElementById("rules").classList.remove('show');
+  rAF = requestAnimationFrame(loop);
+}
+
+window.onload = function() {
+  rAF = requestAnimationFrame(loop);
+}

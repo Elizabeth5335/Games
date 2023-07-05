@@ -22,18 +22,27 @@
         </li>
     </ul>
     <a href="../index.html#content" id="back-button">Home</a>
-
 </header>
 
 <div class="main">
+  
+  <button id="pause" onclick="togglePause()">Pause</button>
+  <button id="restart" onclick="restart()">Restart</button>
+  <button id="rulesBtn" onclick="showRules()">Rules</button>
+  <br>
   <canvas width="320" height="640" id="game"></canvas>
-
+  
     <br>
+    <button id="left">Left</button>
+  <button id="rotate" >Rotate</button>
+  <button id="down">Down</button>
+  <button id="right">Right</button>
+
     <div id="answer" class="answer">
         <h3>Game over!</h3>
         <button id="restartBtn">Restart</button>                  
     </div>
-    <div id="rules" class="show">
+    <div id="rules">
       <h2>Rules</h2>
       <br>
       <h3>Moving: keys left/right<br>
@@ -41,7 +50,7 @@
       Speed up: key down
       </h3>
       <br>
-      <button id="startBtn">Start</button>                  
+      <button id="startBtn">Hide rules</button>                  
   </div>
 </div>
 
