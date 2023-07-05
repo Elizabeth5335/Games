@@ -308,14 +308,15 @@ const rightButton = document.getElementById('right');
 const rotateButton = document.getElementById('rotate');
 const downButton = document.getElementById('down');
 
-leftButton.addEventListener('touchstart', () => {
+leftButton.addEventListener('touchstart', (e) => {
   moveLeft();
   startRepeatedOperation(moveLeft);
+  e.preventDefault();
 });
 
 leftButton.addEventListener('touchend', stopRepeatedOperation);
 
-rightButton.addEventListener('touchstart', () => {
+rightButton.addEventListener('touchstart', (e) => {
   moveRight();
   startRepeatedOperation(moveRight);
 });
@@ -325,14 +326,11 @@ rightButton.addEventListener('touchend', stopRepeatedOperation);
 rotateButton.addEventListener('touchstart', rotateTetromino);
 
 
-downButton.addEventListener('touchstart', () => {
+downButton.addEventListener('touchstart', (e) => {
   down();
   startRepeatedOperation(down);
+  e.preventDefault();
 });
-
-function stopRepeatedOperation() {
-  clearInterval(repeatTimer);
-}
 
 downButton.addEventListener('touchend', stopRepeatedOperation);
 function moveLeft() {
@@ -341,6 +339,12 @@ function moveLeft() {
     tetromino.col = col;
   }
 }
+
+function stopRepeatedOperation() {
+  clearInterval(repeatTimer);
+}
+
+
 
 let repeatTimer;
 
